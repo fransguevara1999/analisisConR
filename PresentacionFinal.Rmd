@@ -1,8 +1,8 @@
 ---
-title: "Mapas Interactivos en R"
+title: "Casos Positivos Perú "
 author: "Helder Frans Junior Guevara Acuña"
-date: "2022/04/03"
-subtitle: Paquete Leaflet
+date: "2022/04/09"
+subtitle: Procesamiento de datos utilizando R y rmarkdown
 output:
   html_document:
     toc: TRUE
@@ -30,152 +30,58 @@ library(leaflet)
 library(leafem)
 
 library(fontawesome)
+library(tidyverse)
 
+library(DT)
+
+library(kableExtra)
+library(lessR)
+library(readxl)
+library(ggplot2)
+
+library(lattice)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Crear contenedor
+# Semillero 2022 --> Casos positivos Perú 2022  
+
+Registro de casos positivos de covid-19 confirmados con cualquier tipo de prueba y que presentan sintomas. Cada registro corresponde a una persona , categorizada por sexo,edad y ubicación geográfica.
+Desde el 02/06/2020
+Fuente: Instituto Nacional de Salud y Centro Nacional de Epidemiologia, prevención y Control de Enfermedades – MINSA.
+
+## Ubicación ministerio de salud 
 
 ```{r}
-# Crear contenedor
+# Minsa
 
-contenedor <- leaflet()
-
-contenedor
-```
-
-
-## Crear Mapa Base - Open Street Map
-
-```{r}
-# Crear Mapa Base - Open Street Map
-
-mapa_base <- leaflet() %>% 
-
-addTiles()
-
-mapa_base
-```
-
-
-## Lat - Lng - Marcador - Círculo
-
-```{r}
-# Ubicación - Latitud - Longitud - Marcadores - Círculo
-
-# Palacio Nacional de La República Dominicana 18.47474559888523, -69.89787861615132
-
-palacio_nacional <- leaflet() %>% 
-
-addTiles() %>% 
-
-addMarkers(lat=18.47474559888523,lng=-69.89787861615132) %>% 
-
-addCircleMarkers(lat=18.47474559888523,lng=-69.89787861615132,color="orange",radius=40)
-
-
-palacio_nacional
-```
-
-
-
-## MiniMapa - Logo
-
-```{r}
-
-# MiniMapa - Logo
-
-# Palacio Nacional de La República Dominicana 18.47474559888523, -69.89787861615132
-
+# Ministerio de salud 18.47474559888523, -69.89787861615132
 img <-"https://www.r-project.org/logo/Rlogo.svg"
 
-palacio_nacional <- leaflet() %>% 
+minsa <- leaflet() %>% 
 
 addTiles() %>% 
 
-leafem::addLogo(img,url="https://cran.r-project.org/",position="topright",width=25,height=25) %>% 
-
-addMarkers(lat=18.47474559888523,lng=-69.89787861615132) %>% 
-
-addCircleMarkers(lat=18.47474559888523,lng=-69.89787861615132,color="orange",radius=40) %>% 
-
-addMiniMap(position="bottomleft",toggleDisplay=TRUE)
-
-
-palacio_nacional
-```
-
-## Popup Setup
-
-```{r}
-# Popup configuración
-
-# Palacio Nacional de La República Dominicana 18.47474559888523, -69.89787861615132
-
-lugar_01 <- c("Palacio Nacional Rep. Dom")
-
-lat_01 <-c(18.47474559888523)
-
-lng_01 <-c(-69.89787861615132)
-
-url_01 <-paste0("<a href='https://bit.ly/3hgCyg3' target='_blank'>Web Palacio Nacional</a>")
-
-img_01 <- paste0("<center><img src='https://bit.ly/36u5WNB' width=200 height=100></center>")
-
-img <-"https://www.r-project.org/logo/Rlogo.svg"
-
-palacio_nacional <- leaflet() %>% 
-
-addTiles() %>% 
 
 leafem::addLogo(img,url="https://cran.r-project.org/",position="topright",width=25,height=25) %>% 
-
-addMarkers(lat=18.47474559888523,lng=-69.89787861615132,popup=paste(sep="<br>","<b>Lugar:</b>",lugar_01,"<b>Latitud:</b>",lat_01,"<b>Longitud:</b>",lng_01,"<b>URL:</b>",url_01,img_01)) %>% 
   
-addCircleMarkers(lat=18.47474559888523,lng=-69.89787861615132,color="orange",radius=40) %>% 
+addMarkers(lat=-12.061612349599727,lng=-77.04273123681513) %>% 
+
+addCircleMarkers(lat=-12.061612349599727,lng=-77.04273123681513,color="orange",radius=40) %>%
 
 addMiniMap(position="bottomleft",toggleDisplay=TRUE)
 
-
-palacio_nacional
+minsa
 ```
-
-## Múltiples Marcadores - Caso I
-
+## Graficos por edad y sexo
 ```{r}
-# Múltiples Marcadores
 
-cent_hist <- data.frame(lugar=c("Iglesia Nuestra Señora de La Merced","Convento Regina Angelorum","Puerta de la Misericordia"),latitud=c(18.47416921486365,18.471116404923126,18.468775880481004),    longitud=c(-69.88824745014279,-69.8871531089362,-69.89011426748678),               color=c("orange","blue","purple"))
 
-centro_historico <- leaflet(data=cent_hist) %>% 
-
-addTiles() %>%  
-
-addMarkers(lat=~latitud,lng=~longitud) %>% 
-
-addCircleMarkers(lat=~latitud,lng=~longitud,color=~color,radius=30) %>% 
-
-addMiniMap(position="bottomleft",toggleDisplay=TRUE)
-
-centro_historico
 ```
 
-## Múltiples Marcadores - Caso II
 
-```{r}
-puntos <- read.csv("C:\\Users\\Helde\\Downloads\\puntos_dom.txt")
+## Diagrama de Barras - Matplotlib
 
-puntos_frame <- data.frame(puntos)
+**Matplotlib** es una librería del lenguaje de programación Python, que nos permite crear gráficos estadísticos de gran calidad, como se muestra a continuación.
 
-centro_historico <- leaflet(data=puntos_frame) %>% 
-
-addTiles() %>%  
-
-addMarkers(lat=~latitud,lng=~longitud) %>% 
-
-addCircleMarkers(lat=~latitud,lng=~longitud,color=~color,radius=30)
-
-centro_historico
-```
 
 <div class="tocify-extend-page" data-unique="tocify-extend-page" style="height: 0;"></div>
