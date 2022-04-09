@@ -1,0 +1,4 @@
+lugar,latitud,longitud,simbolo,color
+Iglesia Nuestra Señora de La Merced,18.47416921486365,-69.88824745014279,ok-sign,dark-blue
+Convento Regina Angelorum,18.471116404923126,-69.8871531089362,ok-sign,orange
+Puerta de la Misericordia,18.468775880481004,-69.89011426748678,ok-sign,blue
